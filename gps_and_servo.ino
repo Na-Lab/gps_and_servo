@@ -12,52 +12,32 @@
 #define GPS_BAUDRATE 9600
 
 #define BUFFER_SIZE 256
-//
-Servo myservo;/*サーボ*/
+//Servo myservo;/*サーボ*/
 
 SoftwareSerial sGps(PIN_GPS_Rx, PIN_GPS_Tx);
 bool isValid;
-
-float pulseMin,pulseMax,pulse_deg,pulse,deg1;/*サーボ*/
   
 void setup() { /*ここで初期値をセットアップ*/
   // put your setup code here, to run once:
  
   Serial.begin(SERIAL_BAUDRATE);
   Serial.println("GPS Logger Start!"); 
-  sGps.begin(GPS_BAUDRATE);
+  //sGps.begin(GPS_BAUDRATE);
 
   isValid = false;
 
-  myservo.attach(9,955,2000); /*(pin番号,最小パルス幅,最大パルス幅*/
+//  myservo.attach(9,955,5000); /*(pin番号,最小パルス幅,最大パルス幅)*/
 
 
 }
 
 void loop() {  /*この部分でループする.*/
-  // put your main code here, to run repeatedly:
+  // put your main code here, to run repeatedly,fai:
 
-  
  char buf[BUFFER_SIZE];
  getLine(buf);  
  analyzeData(buf);
- 
-/*//////////////////////サーボ/////////////////////////////*/
-//   pulseMin = 955; /* パルス幅最小値を360で割る*/
-//  pulseMax = 2000;  /* パルス幅最大値を360で割る*/
-// 
-//  pulse_deg = (pulseMax-pulseMin)/360;  /*1度あたり何パルス幅増えるか*/
-//
-//  deg1 = 200;  /*ここに何度回すか,deg表記で代入*/
-//  pulse = pulse_deg*deg1 + pulseMin;  /*degは何パルス幅か*/
-//
-//  myservo.writeMicroseconds(955);
-//  delay(3000);
-//  myservo.writeMicroseconds(pulse);
-//  delay(3000);
-////  Serial.println(deg1);
-
-/*//////////////////////サーボ/////////////////////////////*/
+ led_func();
 
 }
 
@@ -137,7 +117,7 @@ void analyzeData(char *buf){  /*a関数analyzDataを宣言*/
     Serial.print("緯度");
     Serial.print(stod(gpsLat));
     Serial.print("経度");
-   Serial.println(stod(gpsLon));
+    Serial.println(stod(gpsLon));
 
     Serial.print("目的地までの距離km = ");
     Serial.print(d);
@@ -148,28 +128,35 @@ void analyzeData(char *buf){  /*a関数analyzDataを宣言*/
     Serial.println(y1);
     Serial.println(String(dx, 4));
 
+///*サーボ*//
+//fai=90ならギコギコならない.
+
    if (fai > 0 && fai < 360){
    fai = fai;}
    else if (fai<0){
    fai = 360 + fai;
    }
-    
+//
+//  fai=180;
+//
+//  pulseMin = 955; /* パルス幅最小値を360で割る*/
+//  pulseMax = 2000;  /* パルス幅最大値を360で割る*/
+// 
+//  pulse_deg = (pulseMax-pulseMin)/360;  /*1度あたり何パルス幅増えるか*/
+//
+//  pulse = pulse_deg*fai+pulseMin;  /*degは何パルス幅か*/
+//
+//  myservo.writeMicroseconds(pulse);
 
-/*サーボ*/
-  pulseMin = 955; /* パルス幅最小値を360で割る*/
-  pulseMax = 2000;  /* パルス幅最大値を360で割る*/
- 
-  pulse_deg = (pulseMax-pulseMin)/360;  /*1度あたり何パルス幅増えるか*/
-
-  pulse = pulse_deg*fai + pulseMin;  /*degは何パルス幅か*/
-
-  myservo.writeMicroseconds(pulse);
- 
-/*サーボ*/
-  
-    
   }
 }
+
+
+//*サーボ*/
+  
+    
+ 
+
 float stod(char *s) { /*大内が定義した関数stod.  charをfloatにして返す*/
   float f;
   float deg, min;
