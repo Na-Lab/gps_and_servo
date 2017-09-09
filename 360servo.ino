@@ -21,6 +21,3 @@ myservo.attach(9,955,5000);
   delay(2000);
 
 }
-
-
-
