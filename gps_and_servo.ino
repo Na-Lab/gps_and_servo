@@ -12,7 +12,7 @@
 #define GPS_BAUDRATE 9600
 
 #define BUFFER_SIZE 256
-//Servo myservo;/*サーボ*/
+Servo myservo;/*サーボ*/
 
 SoftwareSerial sGps(PIN_GPS_Rx, PIN_GPS_Tx);
 bool isValid;
@@ -22,11 +22,11 @@ void setup() { /*ここで初期値をセットアップ*/
  
   Serial.begin(SERIAL_BAUDRATE);
   Serial.println("GPS Logger Start!"); 
-  //sGps.begin(GPS_BAUDRATE);
+  sGps.begin(GPS_BAUDRATE);
 
   isValid = false;
 
-//  myservo.attach(9,955,5000); /*(pin番号,最小パルス幅,最大パルス幅)*/
+  myservo.attach(9,955,5000); /*(pin番号,最小パルス幅,最大パルス幅)*/
 
 
 }
@@ -37,7 +37,7 @@ void loop() {  /*この部分でループする.*/
  char buf[BUFFER_SIZE];
  getLine(buf);  
  analyzeData(buf);
- led_func();
+// led_func();
 
 }
 
@@ -134,17 +134,19 @@ void analyzeData(char *buf){  /*a関数analyzDataを宣言*/
    else if (fai<0){
    fai = 360 + fai;
    }
-//
-//  fai=180;
-//
-//  pulseMin = 955; /* パルス幅最小値を360で割る*/
-//  pulseMax = 2000;  /* パルス幅最大値を360で割る*/
-// 
-//  pulse_deg = (pulseMax-pulseMin)/360;  /*1度あたり何パルス幅増えるか*/
-//
-//  pulse = pulse_deg*fai+pulseMin;  /*degは何パルス幅か*/
-//
-//  myservo.writeMicroseconds(pulse);
+
+  fai=180;
+
+  pulseMin = 955; /* パルス幅最小値を360で割る*/
+  pulseMax = 2000;  /* パルス幅最大値を360で割る*/
+ 
+  pulse_deg = (pulseMax-pulseMin)/360;  /*1度あたり何パルス幅増えるか*/
+
+  pulse = pulse_deg*fai+pulseMin;  /*degは何パルス幅か*/
+
+  myservo.writeMicroseconds(pulse);
+
+//led_func();
 
   }
 }
