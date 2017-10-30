@@ -19,5 +19,5 @@ void loop()
     Serial.print(", Longitude = ");
     Serial.println(pos.longitude);
 
-    turn_servo((int)pos.latitude);  // 試しに緯度を渡す
+    turn_servo(pos.latitude);  // 試しに緯度を渡す
 }
